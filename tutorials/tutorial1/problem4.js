@@ -1,18 +1,24 @@
 function landscape() {
-    let result = "";
+    let result_top = "";
+    let result_bottom = "";
+
 
     function flat(size) {
         for (let count = 0; count < size; count++) {
-            result += "_";
+            result_bottom += "_";
+            result_top += " ";
         }
     }
 
     function hill(size) {
-        result += "/";
+        result_bottom += "/";
+        result_top += " ";
         for (let count = 0; count < size; count++) {
-            result += "'";
+            result_top += "_";
+            result_bottom += " ";
         }
-        result += "\\";
+        result_bottom += "\\";
+        result_top += " ";
     }
 
     //START BUILD SCRIPT
@@ -23,9 +29,12 @@ function landscape() {
     flat(1);
     //END BUILD SCRIPT
 
-    return result
+    // return result
+
+    console.log(result_top);
+    console.log(result_bottom);
 
 }
 
-console.log("")
-console.log(landscape())
+// console.log("")
+landscape();
