@@ -31,10 +31,28 @@ let students = [{
 //     console.log(prop, students[prop])
 //     break;
 // }
-students.forEach(student => console.log(student.fname));
-console.log(students.map(student => student.fname)); //???
 
+// Going through each student in the array and getting the first name but WITHOut array 
+// students.forEach(student => console.log(student.fname));
 
-// students.forEach(student =>
+// map takes in a function as a parameter and applies it to each cell 
+console.log(students.map(student => student.fname));
 
-//     console.log("${student.fname} ${student.lname}"));
+// Another way to do 1 --> function way you NEED a return statement 
+// Takes the function and generates a new array (first names) and the function is applied to each element of the previous array (students)
+let first_names = students.map(function(student) { return student.fname });
+console.log(first_names);
+
+// Shorthand functions, you don't need a return statement 
+// Applying the map to the filtered array and from there getting just the first and last name 
+let smart_student = students.filter(student => student.egrade >= 80).map(filtered_array => filtered_array.fname + " " + filtered_array.lname);
+console.log(smart_student);
+
+// Generate and print total average final grades 
+// This gets all the students final grades 
+let final_grade = students.map(student => student.agrade * 0.4 + student.tgrade * 0.1 + student.egrade * 0.5);
+let total_final_grades = final_grade.reduce((accumulator, currentValue) => accumulator + currentValue)
+let num_of_students = students.length;
+let average_final = total_final_grades / num_of_students;
+// toFixed does the rounding and takes parameter as sig figs 
+console.log(average_final.toFixed(2));
