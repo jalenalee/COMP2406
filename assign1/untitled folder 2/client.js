@@ -9,7 +9,7 @@ let aragorn = {
             //First item of this category
             0: {
                 name: "Orc feet",
-                description: "Seasoned and grilled over an open flame.", //
+                description: "Seasoned and grilled over an open flame.",
                 price: 5.50
             },
             1: {
@@ -17,7 +17,7 @@ let aragorn = {
                 description: "Served with warm bread, 5 per order.",
                 price: 4.00
             },
-            2: { //Thank you Kiratchii
+            2: {
                 name: "Sauron's Lava Soup",
                 description: "It's just really spicy water.",
                 price: 7.50
@@ -268,6 +268,129 @@ let frodo = {
 
 let restaurants = [aragorn, legolas, frodo];
 
+
+// menuKeys.forEach(function(key) {
+//     // To print out the categories 
+//     document.getElementById("category").innerHTML = Object.keys(aragorn.menu)
+
+//     let innerObject = Object.keys(aragorn.menu[key])
+
+
+//     innerObject.forEach(function(object) {
+//         document.getElementById("menu").innerHTML += aragorn.menu[key][object].name + "<br />"
+//         document.getElementById("menu").innerHTML += aragorn.menu[key][object].description + "<br />"
+//         document.getElementById("menu").innerHTML += "$" + aragorn.menu[key][object].price + "<br />" + "<br />"
+//     })
+
+// })
+
+
+// Helper functions
+const generateLinks = (elements) => {
+    const ulist = document.createElement("ul");
+
+    const category = document.getElementById("category");
+    const menu = document.getElementById("menu");
+
+    Object.keys(elements).forEach(element => {
+
+        // Create div for each element
+        let div = document.createElement("div");
+        div.id = element;
+        let keys = Object.values(elements[element]);
+        let text = "";
+
+        Object.values(elements[element]).forEach(key => {
+
+
+
+            items = Object.values(key);
+            // console.log("....." + items);
+            // let item = items + "";
+
+            let length = items.length
+            let heading = items.slice(0, 1);
+            let description = items.slice(1, length - 1);
+            let price = items[length - 1];
+            console.log(heading + "\n" + description + "\n" + price);
+
+
+            div.innerHTML += heading + "<br/>";
+            div.innerHTML += description + "<br/>";
+            div.innerHTML += "$ " + price + "<br/>";
+
+            div.innerHTML += "<br/><br/><br/>";
+
+            // let vals = item.split(",");
+            // console.log(vals);
+
+            // vals.forEach(val => div.innerText += val);
+
+            // div.innerHTML = document.createTextNode(item);
+        });
+
+
+
+        // let val = div.innerText.split("\n");
+
+        // div.innerText = val;
+
+        // Object.values(items).forEach(item => {
+        //     div.innerHTML += item + "<br/>";
+        // });
+
+        div.innerHTML += "<br/><br/><br/><br/>";
+
+
+        let values = Object.keys(keys).forEach(value => value.name);
+        // console.log(keys);
+        menu.appendChild(div);
+
+        // Create anchor tags for each element
+        let li = document.createElement("li");
+        let anchor = document.createElement("a");
+        anchor.textContent = element;
+        anchor.setAttribute("href", `#${element}`);
+        li.appendChild(anchor);
+        ulist.appendChild(li);
+    });
+
+    category.appendChild(ulist);
+}
+
+
+const returnMenu = (restaurant) => {
+    const arr = restaurants.filter(rest => rest.name == restaurant);
+    // console.log(arr[0].menu);
+
+    generateLinks(arr[0].menu);
+
+
+}
+
+
+// Event Functions
+const changeRestaurant = (event) => {
+    if (confirm("Are you sure you want to change the restaurant?")) {
+        const restaurant = event.target.value;
+        console.log("Change");
+        console.log(restaurant);
+
+        // Return menu of the selected restaurant
+        returnMenu(restaurant);
+
+    }
+}
+
+
+
+// Event Listeners
+let selectRest = document.getElementById("drop-down");
+
+selectRest.addEventListener("change", changeRestaurant);
+
+
+
 // To make the dropdown menu 
 let dropDown = document.getElementById("drop-down")
 for (let i = 0; i < restaurants.length; i++) {
@@ -277,23 +400,11 @@ for (let i = 0; i < restaurants.length; i++) {
     dropDown.appendChild(restaurant)
 }
 
-// function that returns the menu when aragon is pressed on in the drop down menu
-// function restaurantSelected() {
-//     if document.getElementById("drop-down" = restaurants[0].name) {
-//         // Takes the function and generates a new array (aragon's menu) and the function is applied to each element of the previous array (aragorn)
-//         let aragonMenu = aragorn.map(function(aMenu) { return aMenu.menu })
-//         document.getElementById("menu").innerHTML = aragonMenu
-//     }
-// }
-
 // confirmation button pop up 
 function confirmAlert() {
-    let displayMenu;
     let notif = confirm("Are you sure you want to switch restaurants? ")
     if (notif == true) {
-        displayMenu = "Temp info"
-        console.log('!!!')
-            // document.getElementById("menu").innerHTML
+        // document.getElementById("menu").innerHTML
 
         let currentRestaurant = null;
         switch (document.getElementById("drop-down").value) {
@@ -301,59 +412,51 @@ function confirmAlert() {
 
             case restaurants[0].name:
                 currentRestaurant = aragorn
-                    // this is liek grabbing the categories 
-                const menuKeys = Object.keys(aragorn.menu)
-                console.log(menuKeys)
+                    // Gabbing the keys from the menu (categories)
+                let menuKeys = Object.keys(aragorn.menu)
+
                 menuKeys.forEach(function(key) {
-                        const innerObject = Object.keys(aragorn.menu[key])
-                        console.log(innerObject)
-                        innerObject.forEach(function(object) {
-                            console.log(aragorn.menu[key][object])
-                            document.getElementById("menu").innerHTML += aragorn.menu[key][object].name
-                            document.getElementById("menu").innerHTML += aragorn.menu[key][object].description
-                        })
+                    // To print out the categories 
+                    document.getElementById("category").innerHTML = Object.keys(aragorn.menu)
 
-                        //      console.log(aragorn.menu[key])
-                        //document.getElementById("menu").innerHTML += aragorn.menu[key]
+                    let innerObject = Object.keys(aragorn.menu[key])
+
+
+                    innerObject.forEach(function(object) {
+                        document.getElementById("menu").innerHTML += aragorn.menu[key][object].name + "<br />"
+                        document.getElementById("menu").innerHTML += aragorn.menu[key][object].description + "<br />"
+                        document.getElementById("menu").innerHTML += "$" + aragorn.menu[key][object].price + "<br />" + "<br />"
                     })
-                    // aragorn.menu[temp[0]].forEach((item) => {
-                    //     console.log(item.name + ', ' + item.description)
-                    //})
 
-
-                //Object.keys(aragorn.menu).forEach(function(key) {
-                //  Object.values(aragorn.menu)
-                //});
-
-
-
-
-
-
-                // document.getElementById("menu").innerHTML += Object.keys(aragorn.menu)
-                // document.getElementById("menu").innerHTML += Object.values(aragorn.menu)
-
-
-
-
-                //let aragonMenu = aragorn.menu.map(function(aMenu) { return aMenu })
-
+                })
                 break
-            case restaurants[1].name:
-                let legolasMenu = legolas.map(function(aMenu) { return aMenu.menu })
-                document.getElementById("menu").innerHTML = legolasMenu
-                break
-            case restaurants[2].name:
-                let frodoMenu = frodo.map(function(aMenu) { return aMenu.menu })
-                document.getElementById("menu").innerHTML = frodoMenu
-                break
+                // case restaurants[1].name:
+                //     currentRestaurant = legolas
+                //     let menuKeys = Object.keys(legolas.menu)
+                //     menuKeys.forEach(function(key) {
+                //         let innerObject = Object.keys(legolas.menu[key])
+                //         innerObject.forEach(function(object) {
+                //             document.getElementById("menu").innerHTML += legolas.menu[key][object].name
+                //             document.getElementById("menu").innerHTML += legolas.menu[key][object].description
+                //         })
+                //     })
+                //     break
+                // case restaurants[2].name:
+                //     currentRestaurant = frodo
+                //     let menuKeys = Object.keys(frodo.menu)
+                //     menuKeys.forEach(function(key) {
+                //         let innerObject = Object.keys(frodo.menu[key])
+                //         innerObject.forEach(function(object) {
+                //             document.getElementById("menu").innerHTML += frodo.menu[key][object].name
+                //             document.getElementById("menu").innerHTML += frodo.menu[key][object].description
+                //         })
+                //     })
+                //     break
 
 
         }
     } else {
+        // how to keep it on the same page when you click cancel 
         console.log('??')
     }
-    //document.getElementById("menu").innerHTML = notif
 }
-
-// add to inner text and append to the menu
