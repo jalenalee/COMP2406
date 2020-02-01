@@ -271,7 +271,7 @@ let restaurants = [aragorn, legolas, frodo];
 
 
 // Helper functions
-const generateLinks = (elements) => {
+const generateLinks = (elements, delivery_charge) => {
     const ulist = document.createElement("ul");
 
     const category = document.getElementById("category");
@@ -292,15 +292,19 @@ const generateLinks = (elements) => {
 
             items = Object.values(key);
 
+
             let length = items.length
             let heading = items.slice(0, 1);
             let description = items.slice(1, length - 1);
             let price = items[length - 1];
 
+
+
             childDiv.innerHTML += heading + "<br/>";
             childDiv.innerHTML += description + "<br/>";
             childDiv.innerHTML += "$" + price + "<br/>";
             childDiv.innerHTML += `<input type="number" class="items" min="0">`;
+            childDiv.innerHTML += `<input type="button" class="itemsBtn" value="Add">`;
 
             div.appendChild(childDiv);
 
@@ -313,9 +317,10 @@ const generateLinks = (elements) => {
 
 
         let values = Object.keys(keys).forEach(value => value.name);
+
         menu.appendChild(div);
 
-        // Create anchor tags for each element
+
         let li = document.createElement("li");
         let anchor = document.createElement("a");
         anchor.textContent = element;
@@ -330,9 +335,11 @@ const generateLinks = (elements) => {
 
 const returnMenu = (restaurant) => {
     const arr = restaurants.filter(rest => rest.name == restaurant);
-    // console.log(arr[0].menu);
 
     generateLinks(arr[0].menu);
+
+    // Add to summary
+    arr[0].delivery_charge;
 
 
 }
@@ -343,40 +350,100 @@ const changeRestaurant = (event) => {
     if (confirm("Are you sure you want to change the restaurant?")) {
         const restaurant = event.target.value;
 
+
         // Return menu of the selected restaurant
         returnMenu(restaurant);
 
     }
 }
 
+const getTotal = () => {
+    let total = 0;
+    const trs = document.querySelectorAll("tr");
+    for (let tr of trs) {
+        let price = parseFloat(tr.innerText.slice(tr.innerText.indexOf("(") + 1, tr.innerText.indexOf(")")));
+        total += price;
+    }
+
+    return total;
+}
+
 const addToCart = (name, count, amount) => {
-    console.log(name, count, amount);
+
+    const summary = document.getElementById("summary");
+
+    let table = document.createElement("table");
+    let tr = document.createElement("tr");
+    tr.className = "trs";
+
+    tr.innerHTML = `${name} X ${count} (${parseFloat(count) * parseFloat(amount.slice(1))})`;
+    tr.innerHTML += `<a href="#" class="delete">Remove</a>`;
+    table.appendChild(tr);
+
+    summary.appendChild(table);
+
+    total = getTotal();
+
+
+    let span_total = document.getElementById("total");
+    span_total.innerText = "Total: " + total;
+
 
 }
 
 const addMethod = e => {
     const input = e.target;
-    if (input.classList.contains("items")) {
+    if (input.classList.contains("itemsBtn")) {
         // const elements = Array.from(input.parentElement.children);
         const parent = input.parentElement;
-        console.log(parent);
         const children = Array.from(parent.childNodes);
-        console.log(children);
+
+        // for (let i = 0; i < input.children; i++){
         const name = children[0].nodeValue;
         const amount = children[4].nodeValue;
         const count = children[6].value;
+        // }
+        if (!isNaN(parseInt(count))) {
 
-        addToCart(name, count, amount);
+            addToCart(name, count, amount);
+        }
+
+    }
+}
+
+const removeEntry = (e) => {
+    if (e.target.classList.contains("delete")) {
+
+        let element = e.target;
+
+        const total_entry = document.getElementById("total");
+        let total = parseFloat(total_entry.innerText.slice(total_entry.innerText.indexOf(":") + 2));
+
+
+        const current_value = element.previousSibling;
+        let price = parseFloat(current_value.nodeValue.slice(current_value.nodeValue.indexOf("(") + 1, current_value.nodeValue.indexOf(")")));
+
+        let net = total - price;
+
+
+        element.parentElement.remove();
+
+        let span_total = document.getElementById("total");
+        span_total.innerText = "Total: " + net;
     }
 }
 
 let menuDiv = document.getElementById("menu");
 menu.addEventListener("click", addMethod);
 
+let summaryDiv = document.getElementById("summary");
+summaryDiv.addEventListener("click", removeEntry);
+
 // Event Listeners
 let selectRest = document.getElementById("drop-down");
 
 selectRest.addEventListener("change", changeRestaurant);
+
 
 
 
