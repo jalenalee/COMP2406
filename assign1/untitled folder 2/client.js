@@ -268,21 +268,34 @@ let frodo = {
 
 let restaurants = [aragorn, legolas, frodo];
 
+// Add items function 
+function addItems() {
+    const increaseItems = document.createElement("input")
+        // Has same id as the divs 
+    increaseItems.setAttribute("type", "number");
+    increaseItems.setAttribute("value", "0");
+    // Does not allow it to a negative 
+    increaseItems.setAttribute("min", "0");
+    return increaseItems;
+}
 
-// menuKeys.forEach(function(key) {
-//     // To print out the categories 
-//     document.getElementById("category").innerHTML = Object.keys(aragorn.menu)
+// Math function to calculate the price and items 
+function calculate() {
+    const subtotal = placeholder;
+    const tax = subtotal * 1.10;
+    const deliveryFee = elements.delivery_charge;
+    const total = tax + deliveryFee;
+    const minOrder = elements.min_order - total;
 
-//     let innerObject = Object.keys(aragorn.menu[key])
+}
 
 
-//     innerObject.forEach(function(object) {
-//         document.getElementById("menu").innerHTML += aragorn.menu[key][object].name + "<br />"
-//         document.getElementById("menu").innerHTML += aragorn.menu[key][object].description + "<br />"
-//         document.getElementById("menu").innerHTML += "$" + aragorn.menu[key][object].price + "<br />" + "<br />"
-//     })
+// Order function to populate order column 
+function order() {
+    const orderInfo = document.getElementById("summary")
+    orderInfo.innerHTML
+}
 
-// })
 
 
 // Helper functions
@@ -292,52 +305,41 @@ const generateLinks = (elements) => {
     const category = document.getElementById("category");
     const menu = document.getElementById("menu");
 
-    Object.keys(elements).forEach(element => {
+    // places min order information at the top 
+    const restaurantInfo = document.getElementById("restaurantInfo")
+    restaurantInfo.innerHTML += elements.name + "<br/>" + elements.min_order + "<br/>" + elements.delivery_charge
 
+
+    // This clears the divs every time the page changes
+    category.innerHTML = '';
+    menu.innerHTML = '';
+
+    Object.keys(elements.menu).forEach(element => {
         // Create div for each element
         let div = document.createElement("div");
-        div.id = element;
-        let keys = Object.values(elements[element]);
+        div.id = element.menu;
+
+        let keys = Object.values(elements.menu[element]);
         let text = "";
 
-        Object.values(elements[element]).forEach(key => {
-
-
+        Object.values(elements.menu[element]).forEach(key => {
 
             items = Object.values(key);
-            // console.log("....." + items);
-            // let item = items + "";
 
             let length = items.length
             let heading = items.slice(0, 1);
             let description = items.slice(1, length - 1);
             let price = items[length - 1];
-            console.log(heading + "\n" + description + "\n" + price);
 
-
+            // Adding items to the menu
             div.innerHTML += heading + "<br/>";
             div.innerHTML += description + "<br/>";
-            div.innerHTML += "$ " + price + "<br/>";
+            div.innerHTML += "$ " + price + "<br/>"
+                //div.innerHTML += addItems();
+            div.appendChild(addItems());
 
             div.innerHTML += "<br/><br/><br/>";
-
-            // let vals = item.split(",");
-            // console.log(vals);
-
-            // vals.forEach(val => div.innerText += val);
-
-            // div.innerHTML = document.createTextNode(item);
         });
-
-
-
-        // let val = div.innerText.split("\n");
-
-        // div.innerText = val;
-
-        // Object.values(items).forEach(item => {
-        //     div.innerHTML += item + "<br/>";
-        // });
 
         div.innerHTML += "<br/><br/><br/><br/>";
 
@@ -359,13 +361,11 @@ const generateLinks = (elements) => {
 }
 
 
+
 const returnMenu = (restaurant) => {
     const arr = restaurants.filter(rest => rest.name == restaurant);
-    // console.log(arr[0].menu);
 
-    generateLinks(arr[0].menu);
-
-
+    generateLinks(arr[0]);
 }
 
 
@@ -373,8 +373,6 @@ const returnMenu = (restaurant) => {
 const changeRestaurant = (event) => {
     if (confirm("Are you sure you want to change the restaurant?")) {
         const restaurant = event.target.value;
-        console.log("Change");
-        console.log(restaurant);
 
         // Return menu of the selected restaurant
         returnMenu(restaurant);
@@ -382,81 +380,32 @@ const changeRestaurant = (event) => {
     }
 }
 
+const addToCart = (event) => {
+    const element = event.target;
+    console.log(element.value);
+    if (element.value == 0) {
+        // remove element from cart
+    } else {
+        // add/change elements to cart
+    }
+
+}
+
 
 
 // Event Listeners
 let selectRest = document.getElementById("drop-down");
-
 selectRest.addEventListener("change", changeRestaurant);
 
 
+// Adding Items
+console.log(document.getElementsByTagName("input"));
 
 // To make the dropdown menu 
 let dropDown = document.getElementById("drop-down")
 for (let i = 0; i < restaurants.length; i++) {
     let restaurant = document.createElement("option")
-        // how to do it w/ innerText.html can i just like append it 
     restaurant.textContent = restaurants[i].name
     dropDown.appendChild(restaurant)
 }
-
-// confirmation button pop up 
-function confirmAlert() {
-    let notif = confirm("Are you sure you want to switch restaurants? ")
-    if (notif == true) {
-        // document.getElementById("menu").innerHTML
-
-        let currentRestaurant = null;
-        switch (document.getElementById("drop-down").value) {
-            // place the BIG MENU KEYS CODE ADN PUT HERE 
-
-            case restaurants[0].name:
-                currentRestaurant = aragorn
-                    // Gabbing the keys from the menu (categories)
-                let menuKeys = Object.keys(aragorn.menu)
-
-                menuKeys.forEach(function(key) {
-                    // To print out the categories 
-                    document.getElementById("category").innerHTML = Object.keys(aragorn.menu)
-
-                    let innerObject = Object.keys(aragorn.menu[key])
-
-
-                    innerObject.forEach(function(object) {
-                        document.getElementById("menu").innerHTML += aragorn.menu[key][object].name + "<br />"
-                        document.getElementById("menu").innerHTML += aragorn.menu[key][object].description + "<br />"
-                        document.getElementById("menu").innerHTML += "$" + aragorn.menu[key][object].price + "<br />" + "<br />"
-                    })
-
-                })
-                break
-                // case restaurants[1].name:
-                //     currentRestaurant = legolas
-                //     let menuKeys = Object.keys(legolas.menu)
-                //     menuKeys.forEach(function(key) {
-                //         let innerObject = Object.keys(legolas.menu[key])
-                //         innerObject.forEach(function(object) {
-                //             document.getElementById("menu").innerHTML += legolas.menu[key][object].name
-                //             document.getElementById("menu").innerHTML += legolas.menu[key][object].description
-                //         })
-                //     })
-                //     break
-                // case restaurants[2].name:
-                //     currentRestaurant = frodo
-                //     let menuKeys = Object.keys(frodo.menu)
-                //     menuKeys.forEach(function(key) {
-                //         let innerObject = Object.keys(frodo.menu[key])
-                //         innerObject.forEach(function(object) {
-                //             document.getElementById("menu").innerHTML += frodo.menu[key][object].name
-                //             document.getElementById("menu").innerHTML += frodo.menu[key][object].description
-                //         })
-                //     })
-                //     break
-
-
-        }
-    } else {
-        // how to keep it on the same page when you click cancel 
-        console.log('??')
-    }
-}
+console.log(element.value);

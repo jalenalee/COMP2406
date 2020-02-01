@@ -1,34 +1,28 @@
 .column {
     float: left;
     width: 33.33%;
+    column-rule-style: solid;
+    column-rule-width: 2px;
+    column-rule-color: darkslateblue;
 }
 
 
 /* background */
 
 body {
-    background-color: lightblue;
-}
-
-
-/* universal */
-
-body {
+    background-image: light-blue;
+    background-color: #cccccc;
+    background-repeat: no-repeat;
     padding-top: 60px;
+    background-image: url("background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
 }
 
-section {
-    overflow: auto;
-}
-
-textarea {
-    resize: vertical;
-}
-
-.center {
+h1 {
+    font-family: "Lucida Console", Monaco, monospace;
+    text-shadow: 0 0 0.2em rgb(173, 166, 219), 0 0 0.2em #87F, 0 0 0.2em #87F;
+    color: white;
     text-align: center;
-}
-
-.center h1 {
-    margin-bottom: 10px;
 }
