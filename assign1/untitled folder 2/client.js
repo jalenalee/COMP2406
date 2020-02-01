@@ -268,34 +268,6 @@ let frodo = {
 
 let restaurants = [aragorn, legolas, frodo];
 
-// Add items function 
-function addItems() {
-    const increaseItems = document.createElement("input")
-        // Has same id as the divs 
-    increaseItems.setAttribute("type", "number");
-    increaseItems.setAttribute("value", "0");
-    // Does not allow it to a negative 
-    increaseItems.setAttribute("min", "0");
-    return increaseItems;
-}
-
-// Math function to calculate the price and items 
-function calculate() {
-    const subtotal = placeholder;
-    const tax = subtotal * 1.10;
-    const deliveryFee = elements.delivery_charge;
-    const total = tax + deliveryFee;
-    const minOrder = elements.min_order - total;
-
-}
-
-
-// Order function to populate order column 
-function order() {
-    const orderInfo = document.getElementById("summary")
-    orderInfo.innerHTML
-}
-
 
 
 // Helper functions
@@ -305,24 +277,18 @@ const generateLinks = (elements) => {
     const category = document.getElementById("category");
     const menu = document.getElementById("menu");
 
-    // places min order information at the top 
-    const restaurantInfo = document.getElementById("restaurantInfo")
-    restaurantInfo.innerHTML += elements.name + "<br/>" + elements.min_order + "<br/>" + elements.delivery_charge
+    Object.keys(elements).forEach(element => {
 
-
-    // This clears the divs every time the page changes
-    category.innerHTML = '';
-    menu.innerHTML = '';
-
-    Object.keys(elements.menu).forEach(element => {
         // Create div for each element
         let div = document.createElement("div");
-        div.id = element.menu;
-
-        let keys = Object.values(elements.menu[element]);
+        div.id = element;
+        let keys = Object.values(elements[element]);
         let text = "";
 
-        Object.values(elements.menu[element]).forEach(key => {
+        Object.values(elements[element]).forEach(key => {
+
+            const childDiv = document.createElement("div");
+            childDiv.className = "child";
 
             items = Object.values(key);
 
@@ -331,21 +297,22 @@ const generateLinks = (elements) => {
             let description = items.slice(1, length - 1);
             let price = items[length - 1];
 
-            // Adding items to the menu
-            div.innerHTML += heading + "<br/>";
-            div.innerHTML += description + "<br/>";
-            div.innerHTML += "$ " + price + "<br/>"
-                //div.innerHTML += addItems();
-            div.appendChild(addItems());
+            childDiv.innerHTML += heading + "<br/>";
+            childDiv.innerHTML += description + "<br/>";
+            childDiv.innerHTML += "$" + price + "<br/>";
+            childDiv.innerHTML += `<input type="number" class="items" min="0">`;
+
+            div.appendChild(childDiv);
 
             div.innerHTML += "<br/><br/><br/>";
+
         });
+
 
         div.innerHTML += "<br/><br/><br/><br/>";
 
 
         let values = Object.keys(keys).forEach(value => value.name);
-        // console.log(keys);
         menu.appendChild(div);
 
         // Create anchor tags for each element
@@ -361,11 +328,13 @@ const generateLinks = (elements) => {
 }
 
 
-
 const returnMenu = (restaurant) => {
     const arr = restaurants.filter(rest => rest.name == restaurant);
+    // console.log(arr[0].menu);
 
-    generateLinks(arr[0]);
+    generateLinks(arr[0].menu);
+
+
 }
 
 
@@ -380,26 +349,36 @@ const changeRestaurant = (event) => {
     }
 }
 
-const addToCart = (event) => {
-    const element = event.target;
-    console.log(element.value);
-    if (element.value == 0) {
-        // remove element from cart
-    } else {
-        // add/change elements to cart
-    }
+const addToCart = (name, count, amount) => {
+    console.log(name, count, amount);
 
 }
 
+const addMethod = e => {
+    const input = e.target;
+    if (input.classList.contains("items")) {
+        // const elements = Array.from(input.parentElement.children);
+        const parent = input.parentElement;
+        console.log(parent);
+        const children = Array.from(parent.childNodes);
+        console.log(children);
+        const name = children[0].nodeValue;
+        const amount = children[4].nodeValue;
+        const count = children[6].value;
 
+        addToCart(name, count, amount);
+    }
+}
+
+let menuDiv = document.getElementById("menu");
+menu.addEventListener("click", addMethod);
 
 // Event Listeners
 let selectRest = document.getElementById("drop-down");
+
 selectRest.addEventListener("change", changeRestaurant);
 
 
-// Adding Items
-console.log(document.getElementsByTagName("input"));
 
 // To make the dropdown menu 
 let dropDown = document.getElementById("drop-down")
@@ -408,4 +387,3 @@ for (let i = 0; i < restaurants.length; i++) {
     restaurant.textContent = restaurants[i].name
     dropDown.appendChild(restaurant)
 }
-console.log(element.value);
