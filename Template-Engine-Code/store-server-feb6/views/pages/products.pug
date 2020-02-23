@@ -1,0 +1,12 @@
+html
+	head
+		title Store Manager Products Page
+body
+	include ../partials/header
+
+	div#main
+		each product in products
+			a(href="/products/" + product.id) #{product.name}
+			br
+			
+	include ../partials/footer

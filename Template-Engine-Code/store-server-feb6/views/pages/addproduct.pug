@@ -1,0 +1,15 @@
+html
+	head
+		title Store Manager Products Page
+body(onload="init()")
+	include ../partials/header
+
+	div#main
+		p Name: 
+			input(type="textbox", id="name")
+		p Price: 
+			input(type="textbox", id="price")
+		button(type="button", id="submit") Submit
+		
+	script(src="addproduct.js")
+	include ../partials/footer
