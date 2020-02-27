@@ -1,0 +1,29 @@
+Total Marks: 100
+
+There will be a 20% penalty assigned if your README file does not provide sufficient instructions to run your server. The TA should be able to follow your instructions precisely to get everything running without issue.
+
+Server Load (10 marks):
+	10 - Reads all files from restaurants directory successfully
+	
+Header (10 marks):
+	10 - Header is shown on all pages (including order form) and has required links
+	
+Home Page (5 marks):
+	5 - Requests to http://localhost:3000/ result in seeing the home page and welcome message
+	
+Order Form (30 marks):
+	8 - Drop-down menu content is dynamically loaded from server when the page loads
+	8 - Selecting/changing drop-down menu item dynamically loads menu data from server
+	3 - Selecting/changing drop-down menu item removes previous restaurants data
+	6 - Submit order button sends order data to server
+	5 - When server responds to submitted order, the page is reset
+	
+Restaurant Statistics (30 marks):
+	REQUIRED: Uses a template engine to renger the statistics HTML
+	6 - Returned page contains an entry for each restaurant
+	7 - Entries correctly show total number of orders
+	7 - Entries correctly show average order total
+	10 - Entries correctly show the most popular item
+	
+Code Quality and Documentation (15 marks):
+	Your code should be well-written and easy to understand. This includes providing clear documentation explaining the purpose and function of pieces of your code. You should use good variable/function names that make your code easier to read. You should do your best to avoid unnecessary computation and ensure that your code runs smoothly throughout operation. You should also include a README.txt file that explains any design decisions that you made, as well as any additional instructions that may be helpful to the TA.

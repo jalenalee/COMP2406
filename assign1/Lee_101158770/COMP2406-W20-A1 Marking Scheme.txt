@@ -1,0 +1,39 @@
+100 marks total
+
+Initial Page Load (10 marks):
+	3 - Page contains drop-down list or other method of selecting restaurant
+	7- Contents of drop-down list are dynamically created from available data
+		
+When a Restaurant is Selected (20 marks):
+	1 - confirmation prompt is shown if order exists
+	2 - Nothing changes on page if user selects cancel from confirmation prompt
+	3 - New menu is shown on page when change is confirmed, or if there is no current order
+	2 - All information from previous restaurant is removed
+	2 - Order information is reset, if it existed
+	4 - restaurant's name, minimum order, and delivery fee are displayed near top of page
+	6 - page has proper three-column format for categories, menu, and order summary
+
+Menu Requirements (20 marks):
+	3 - categories are clearly distinct
+	3 - items are clearly distinct
+	3 - items show all item information (name, description, price)
+	3 - add element is provided next to each item
+	5 - add element increases quantity of correct item in order when clicked
+	3 - all dollar values rounded to two decimal places
+	
+Order Summary Requirements (30 marks):
+	2 - each item currently in the order is included
+	2 - each item shows its name, number of units in the order, and total price
+	2 - remove element is provided next to each item
+	6 - clicking remove element decreases quantity of correct item in order
+	4 - decreasing an item's quantity to 0 removes it from the summary
+	4 - subtotal, tax, delivery fee, and total are calculated correctly and displayed
+	4 - order button/element is displayed/hidden in correct cases
+	4 - 'add $X more to order' message is calculated and displayed in correct cases
+	2 - all dollar values rounded to two decimal places
+	
+Overall Page Quality (10 marks):
+These marks will be allocated for the overall quality of your page's implementation. This will include factors such as the visual appeal of your page, as well as the responsiveness of your page to user actions and changes. For example, how does your page react to the changing of the browser dimensions? Is information easy to find on your page? Is everything on the page formatted in a clear way? If you struggle to make visually appealing pages, you can focus on adding behavioural elements to your page (e.g., aligning the categories and order summary with the current location in the menu).
+
+Code Quality and Documentation (10 marks):
+Your code should be well-written and easy to understand. This includes providing clear documentation explaining the purpose and function of pieces of your code. You should use good variable/function names that make your code easier to read. You should do your best to avoid unnecessary computation and ensure that your code runs smoothly throughout operation. You should also include a README.txt file that explains any design decisions that you made, as well as any additional instructions that may be helpful to the TA.

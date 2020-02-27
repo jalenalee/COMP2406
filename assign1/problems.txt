@@ -1,0 +1,9 @@
+PROBLEMS 
+- can't separate the categories into three lines 
+- how to hyperlink them 
+- cancel works like it stayes on the page but the thing is the drop down thing still changes :( 
+
+
+smaller not as important problems 
+- can't have the food item <h1> 
+
