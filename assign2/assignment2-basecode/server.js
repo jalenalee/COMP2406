@@ -56,8 +56,12 @@ function getAllRestaurants(dir) {
     }
 }
 
+//Create a server, giving it the handler function
+//Request represents the incoming request object
+//Response represents the outgoing response object
+//Remember, you can break this apart to make it look cleaner
 const server = http.createServer(function(request, response) {
-
+    // GET: --> go to todo.html --> /todo.html --> /todo.js
     if (request.method === "GET") {
         if (request.url === "/" || request.url === "/index") {
             let data = renderHome("./views/pages/index.pug", {});
