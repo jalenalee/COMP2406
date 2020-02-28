@@ -1,0 +1,15 @@
+Routing 
+- Reference a file you might get 404 not found
+- Reference javascript in one of three ways: 
+try to put your javascript in javascript folder 
+1) <script src="a1.js"></script>
+- relative to current directory you loaded file in 
+2) <script src="/a1.js"></script>
+- go to computer home directory to find it 
+
+- when in doubt, use a div ! add lots of divs !
+
+
+when creating element, ask yourself what are you creating this for: 
+- use id because it's unique (only call THAT element)
+- if you're going to do something to a GROUP, give it a class 
