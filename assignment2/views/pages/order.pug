@@ -1,0 +1,32 @@
+html
+  head
+    title Order Form
+    style.
+      .column {
+      float: left;
+      }
+      .left {
+      width: 10%;
+      }
+      .right {
+      width: 25%;
+      }
+      .middle {
+      width: 65%;
+      }
+  body(onload='init()')
+    include ../partials/header
+    br
+    br
+    h1 Let's Order Food!
+    select#restaurant-select
+    br
+    br
+    #info
+    #main
+      #left.column.left
+      #middle.column.middle
+      #right.column.right
+    script(src='../../client.js')
+
+    include ../partials/footer
