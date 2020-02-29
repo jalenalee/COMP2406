@@ -69,7 +69,7 @@ function selectRestaurant(event) {
     //If switch is confirmed, load the new restaurant data
     if (result && selectedValue !== "none") {
         console.log(select.options[select.selectedIndex].text);
-        // 	//In A2, current restaurant will be data you received from the server
+        // In A2, current restaurant will be data you received from the server
         xhr.open("GET", restFile, true);
         xhr.onload = function() {
             if (xhr.status === 200) {

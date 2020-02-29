@@ -1,1 +1,0 @@
-{"restaurant":"Frodo's Flapjacks","total":"75.30","popular":"Hobbit Hash","qty":7};{"restaurant":"Frodo's Flapjacks","total":"206.20","popular":"The Full Flapjack Breakfast","qty":13};{"restaurant":"Frodo's Flapjacks","total":"65.40","popular":"Hobbit Hash","qty":6};
