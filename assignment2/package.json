@@ -1,0 +1,19 @@
+{
+    "name": "comp2406a2",
+    "version": "1.0.0",
+    "description": "this is a restaurant ordering system",
+    "main": "addproduct.js",
+    "dependencies": {
+        "pug": "^2.0.4"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.2"
+    },
+    "scripts": {
+        "dev": "nodemon ./server.js",
+        "app": "node ./server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
