@@ -1,0 +1,23 @@
+html
+	head
+		title Stats
+body
+	include ../partials/header
+
+	div#main
+		h1 Restaurant Sales Status Summary!
+		table(style='width:100%', border='1')
+			tr
+				th Restaurant
+				th # Orders
+				th Avg. Order
+				th Popular Item
+			tbody
+				each rest in restaurant
+					tr
+						td #{rest.name}
+						td #{rest.min_order}
+						td #{rest.delivery_fee}
+						td #{JSON.stringify(rest.menu)}
+			
+	include ../partials/footer

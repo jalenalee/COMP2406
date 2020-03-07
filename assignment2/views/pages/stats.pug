@@ -1,0 +1,26 @@
+html
+	head
+		title Stats
+body
+	include ../partials/header
+
+	div#main
+		h1 Restaurant Sales Status Summary!
+		table(style='width:100%', border='1')
+			tr
+				th Restaurant
+				th # Orders
+				th Avg. Order
+				th Popular Item
+			tbody
+				tr
+				//- - let count = 0;
+					//- td restaurant_data
+				each rest in rest_details
+					tr
+						td #{rest.restaurant}
+						td #{rest.order_count}
+						td #{rest.avg_total}
+						td #{rest.popular}
+			
+	include ../partials/footer
