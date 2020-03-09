@@ -1,0 +1,39 @@
+<!-- html
+	head
+		title Restaurants
+body
+	include ../partials/header
+
+	div#main
+		h1 Choose a Restaurant 
+		table(style='width:100%', border='1')
+			tr
+				th Restaurant
+				//- th # Orders
+				//- th Avg. Order
+				//- th Popular Item
+			tbody
+				tr
+				//- - let count = 0;
+					//- td restaurant_data
+				each rest in restaurants
+					tr
+						td #{rest.name}
+						//- td #{rest.order_count}
+						//- td #{rest.avg_total}
+						//- td #{rest.popular}
+			
+	include ../partials/footer -->
+
+<html>
+
+<head>
+    <% include('header.ejs') %>
+</head>
+
+<body>
+</body>
+<% include('footer.ejs') %>
+
+
+</html>
