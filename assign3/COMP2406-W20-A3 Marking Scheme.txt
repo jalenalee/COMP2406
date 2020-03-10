@@ -1,0 +1,48 @@
+Total Marks: 100
+
+General Server (8 marks):
+	4 - Successfully loads all provided restaurant files
+	4 - All HTML pages served contain proper header
+	
+GET / (2 marks)
+	2 - Sends correct HTML response (header, welcome message).
+	
+GET /restaurants (12 marks)
+	HTML requested:
+		3 - Page contains all restaurants on server
+		3 - Links are for correct URLs
+	JSON requested:
+		3 - Contains all restaurant IDs
+		3 - Has proper format
+		
+GET /addrestaurant (12 marks)
+	4 - Page provides method to specify restaurant details
+	4 - Page provides way to POST data to /restaurants
+	4 - Redirects successfully after POST is completed
+	
+POST /restaurants (16 marks)
+	4 - Verifies correct fields exist (name, delivery_fee, min_order)
+	4 - Initializes new restaurant's menu to be a blank object
+	4 - Assigns a unique ID to new restaurant
+	4 - Responds with JSON representation of newly created restaurant
+	
+GET /restaurants/:restID (28 marks)
+	HTML requested:
+		4 - Provided page contains all necessary information when loaded (name, delivery fee, minimum order, menu data)
+		2 - Provided page allows name, delivery fee, and minimum order to be modified
+		3 - Provided page allows user to add new category and updates display correctly
+		3 - Provided page allows user to add new item
+		3 - Category selection for adding new item updates to include newly added categories
+		4 - Save button makes PUT request to correct URL
+		4 - PUT request sends correct data to server
+		1 - Alert is shown when PUT request is successfully completed
+	JSON requested:
+		4 - Sends correct restaurant in correct JSON format
+
+PUT /restaurants/:restID (7 marks)
+	4 - Updates specified restaurant correctly
+	2 - Sends response to confirm changes
+	1 - Sends 404 response for unknown restaurant IDs
+	
+Code Quality and Documentation (15 marks)
+Your code should be well-written and easy to understand. This includes providing clear documentation explaining the purpose and function of pieces of your code. You should use good variable/function names that make your code easier to read. You should do your best to avoid unnecessary computation and ensure that your code runs smoothly throughout operation.
