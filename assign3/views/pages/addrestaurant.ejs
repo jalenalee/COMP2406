@@ -1,0 +1,16 @@
+<!-- am i posting to the right place?  -->
+<%include partials/header.ejs%>
+    <form action="/restaurant/:id" method="POST" action='/restaurants'>
+        <label for="name">Name: </label>
+        <input id="name" type="text" name="name_field" value=" ">
+        <br><br>
+        <label for="delivery-fee">Delivery Fee: </label>
+        <input id="delivery-fee" type="text" name="name_field" value="">
+
+        <br><br>
+        <label for="min-order">Minimum Order </label>
+        <input id="min-order" type="text" name="name_field" value="">
+
+        <br><br>
+        <input type="submit" value="submit">
+    </form>

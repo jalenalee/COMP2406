@@ -3,7 +3,15 @@ const path = require("path");
 const fs = require("fs");
 // const config = require("./config.json");
 let restaurants = {};
-// const dbConnect = config.get("mongoDB");
+var bodyParser = require('body-parser');
+
+// create application/json parser (do i need this?)
+var jsonParser = bodyParser.json();
+
+// create application/x-www-form-urlencoded parser (middleware that pasts post data for us)
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+
 
 const app = express();
 // adds ejs into our express app 
@@ -18,24 +26,34 @@ function home(req, res) {
 // app.get("/", home);
 // app.get("/add", )
 
-// 1
+// do i need the next thing 
 app.get("/", (req, res) => {
     res.render('index');
-    // res.json({ msg: "Welcome to the Restaurants Page" });
+    res.json({ msg: "Welcome to the Restaurants Page" });
 })
 
 app.get("/restaurants", (req, res) => {
-    // res.render('restaurants', { restaurants })
+    res.render('restaurants', { restaurants })
+    console.log(restaurants.rests.id);
     res.json({ rests: restaurants });
 
 })
 
+// question 3
 app.get("/addrestaurant", (req, res) => {
     // is this right? 
-    res.render('addrestaurant');
+    res.render('Restaurant added', { output: req.body.id });
 })
 
-app.post("/restaurant", (req, res) => {
+// post :id because you want to post to that SPECIFIC page
+app.post("/restaurant/:id", urlencodedParser, (req, res) => {
+    console.log(req.body);
+    // is this right? the .id part? 
+    let id = req.body.id;
+    res.redirect('/restaurant/:id' + id);
+})
+
+app.post("/restaurants", (req, res) => {
 
 })
 

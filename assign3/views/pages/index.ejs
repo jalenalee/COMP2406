@@ -1,11 +1,17 @@
-html
-	head
-		title Restaurant Home Page
-body
-	include ../partials/header
+<!DOCTYPE html>
+<html lang="en">
 
-	div#main
-		h1 Welcome to the Restaurant Ordering System!
-		br
-	script(src="/client.js")
-	include ../partials/footer
+<head>
+    <!-- why isn't this working -->
+    <%include partials/header.ejs%>
+</head>
+<html>
+
+<body>
+    Welcome to my restaurant.
+</body>
+<footer>
+    <%include partials/footer.ejs %>
+</footer>
+
+</html>
