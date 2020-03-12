@@ -1,12 +1,10 @@
 const express = require('express');
 const path = require("path");
 const fs = require("fs");
-const uuid = require("uuid");
+// const uuid = require("uuid");
 
 let connect = require('connect')
 let http = require('http');
-let app = connect();
-
 
 let restaurants = {};
 
@@ -29,6 +27,7 @@ app.get("/", (req, res) => {
 
 app.get("/restaurants", (req, res) => {
     if (req.headers["content-type"] == "application/json") {
+        req.accepts("html");
         res.json({ restaurants });
     } else {
         res.render('pages/restaurants', { restaurants });
