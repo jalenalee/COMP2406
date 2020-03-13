@@ -1,0 +1,266 @@
+<html>
+
+<head>
+    <% include ../partials/header %>
+</head>
+
+<!-- runs a method that pre fills the values with the existing restaurants using init() method and  -->
+
+<body onload="init()">
+    <br><br>
+    <form id="restaurant_details">
+        <div>
+            <label for="id"><strong>Restaurant ID: </strong></label>
+            <input type="text" id="rest_id" value=<%=restaurant.id%> disabled>
+        </div>
+        <div>
+            <label for="name"><strong>Restaurant Name: </strong>*</label>
+            <textarea id="name" rows="1" cols="50" style="max-width: 200px; max-height: 100px; resize:none;"><%= restaurant.name %></textarea>
+        </div>
+        <div>
+            <label for="min-order"><strong>Restaurant Min Order: </strong>*</label>
+            <input type="number" id="min-order" value=<%=restaurant.min_order%> min="1">
+        </div>
+        <div>
+            <label for="delivery-fee"><strong>Delivery Fee: </strong>*</label>
+            <input type="text" id="delivery-fee" value=<%=restaurant.delivery_fee %>>
+        </div>
+        <br><br><br>
+    </form>
+
+    <form id="category_name" onsubmit="submitCategory(event)">
+        <h2>Add Category: </h2>
+        <label for="category"><strong>Category Name: </strong></label>
+        <input type="text" id="category">
+        <input type="submit" value="Add Category">
+    </form>
+    <br><br><br>
+
+    <form id="add_item" onsubmit="addItem(event)">
+        <h2>Add Item: </h2>
+        <div>
+            <label for="select_category"><strong>Select Category: </strong></label>
+            <select id="select_category"></select>
+        </div>
+        <div>
+            <label for="item_name"><strong>Item Name: </strong></label>
+            <textarea id="item_name" rows="1" cols="50" style="max-width: 200px; max-height: 100px; resize:none;"></textarea>
+        </div>
+        <div>
+            <label for="item_desc"><strong>Item Description: </strong></label>
+            <textarea id="item_desc" rows="1" cols="50" style="max-width: 200px; max-height: 100px; resize:none;"></textarea>
+        </div>
+        <div>
+            <label for="item_price"><strong>Item Price: </strong></label>
+            <input type="text" id="item_price">
+        </div>
+        <div>
+            <input type="submit" value="Add Item">
+        </div>
+    </form>
+
+    <form id="menu">
+        <h1>Menu: </h1>
+        <% const menu = restaurant.menu ? restaurant.menu : null;
+	if (menu){
+	 Object.keys(menu).map(category => {
+		  const category_details = menu[category];
+	 %>
+            <h2>
+                <%= category %>
+            </h2>
+            <div id=<%=category %>>
+                <% Object.keys(category_details).map(cat_id => { %>
+                    <div>
+                        <label><%= category_details[cat_id].name %></label>
+                        <label>( $<%= category_details[cat_id].price %>)</label><br>
+                        <label><%= category_details[cat_id].description %></label>
+                    </div>
+                    <br><br>
+                    <% }) %>
+            </div>
+            <% }) } %>
+    </form>
+
+    <div>
+        <input type="submit" value="Save Changes" onclick="submitChanges(event)">
+    </div>
+
+    <script>
+        // let menu = {};
+
+        function submitChanges(e) {
+            e.preventDefault();
+            // console.log("Form Submitted");
+            if (!sessionStorage.getItem("restaurant")) {
+                return;
+            }
+            const session_restaurant = JSON.parse(sessionStorage.getItem("restaurant"));
+            // console.log(session_restaurant);
+            const restaurant_name = document.getElementById("name").value;
+            const min_order = document.getElementById("min-order").value;
+            const delivery_fee = document.getElementById("delivery-fee").value;
+
+            if (restaurant_name != "" && min_order != "" && delivery_fee != "") {
+                session_restaurant.restaurant.name = restaurant_name;
+                session_restaurant.restaurant.min_order = min_order;
+                session_restaurant.restaurant.delivery_fee = delivery_fee;
+
+                sessionStorage.setItem("restaurant", JSON.stringify(session_restaurant));
+                console.log("Changes Saved !!");
+            } else {
+                alert("Please enter all the marked Restaurant Details");
+                return;
+            }
+
+            // Send to Server
+            console.log(session_restaurant.restaurant.id);
+            const xhr = new XMLHttpRequest();
+            xhr.open("PUT", "http://localhost:3000/restaurants/" + session_restaurant.restaurant.id, true);
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // alert("Changes Saved. Please go to the Browse Restaurants Page !!");
+                    alert(JSON.parse(xhr.responseText).msg);
+                }
+            }
+            xhr.send(JSON.stringify(session_restaurant));
+        }
+
+        function init() {
+            // Get restaurant details from server
+            const id = document.getElementById("rest_id").value;
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", `http://localhost:3000/restaurants/${id}`);
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    sessionStorage.setItem("restaurant", xhr.responseText);
+                    clearSelect();
+                    fillCategories();
+                }
+            }
+            xhr.send();
+        }
+
+        function submitCategory(e) {
+            e.preventDefault();
+            const category = document.getElementById("category").value.trim();
+            if (category == "") {
+                alert("Please enter a Category");
+                return;
+            }
+            // const rest_id = document.getElementById("rest_id").value;
+            // const rest_name = document.getElementById("name").value;
+            // const rest_minOrder = document.getElementById("min-order").value;
+            // const rest_deliveryFee = document.getElementById("delivery-fee").value;
+
+            const curr_rest = JSON.parse(sessionStorage.getItem("restaurant"));
+            if (!curr_rest.restaurant.menu) {
+                curr_rest.restaurant.menu = {};
+            }
+
+            if (curr_rest.restaurant.menu[category]) {
+                alert("Category already exists. Please try another one !!");
+                return;
+            }
+            curr_rest.restaurant.menu[category] = {};
+            // const restaurant = {
+            // 	rest_id,
+            // 	rest_name,
+            // 	rest_minOrder,
+            // 	rest_deliveryFee,
+            // 	menu
+            // };
+            sessionStorage.setItem("restaurant", JSON.stringify(curr_rest));
+
+            // Create Category on page
+            const menuForm = document.getElementById("menu");
+            const menuItem = document.createElement("h2");
+            menuItem.appendChild(document.createTextNode(category));
+
+            const menuDiv = document.createElement("div");
+            menuDiv.id = category;
+
+            menuForm.appendChild(menuDiv);
+
+            menuForm.insertBefore(menuItem, menuDiv);
+
+            clearSelect();
+            fillCategories();
+        }
+
+        function clearSelect() {
+            const select_categories = document.getElementById("select_category");
+            select_categories.options.length = 0;
+        }
+
+        function fillCategories() {
+            const select_categories = document.getElementById("select_category");
+            // Now, refill select options
+            if (sessionStorage.getItem("restaurant") && JSON.parse(sessionStorage.getItem("restaurant")).restaurant.menu) {
+                let menu = JSON.parse(sessionStorage.getItem("restaurant")).restaurant.menu;
+                Object.keys(menu).map(category => {
+                    let option = document.createElement("option");
+                    option.appendChild(document.createTextNode(category));
+                    select_categories.appendChild(option);
+                });
+
+            }
+        }
+
+        function addItem(e) {
+            e.preventDefault();
+            const selectedCategory = document.getElementById("select_category").value;
+            if (selectedCategory == "") {
+                alert("No Category Selected");
+                return;
+            }
+            const item_name = document.getElementById("item_name").value;
+            const item_desc = document.getElementById("item_desc").value;
+            const item_price = document.getElementById("item_price").value;
+            // console.log(item_name.length, item_desc, item_price);
+            if (item_name != "" && item_desc != "" && item_price != "" && !isNaN(item_price)) {
+                //add item
+                const rest = JSON.parse(sessionStorage.getItem("restaurant"));
+                // console.log("Before Adding Item: "+ sessionStorage.getItem("restaurant"));
+                const cats = rest.restaurant.menu;
+                // const category = cats.filter(category => category == selectedCategory);
+                cats[selectedCategory][item_name] = {
+                        name: item_name,
+                        description: item_desc,
+                        price: Number(item_price).toFixed(2)
+                    }
+                    // console.log(cats);
+                sessionStorage.setItem("restaurant", JSON.stringify(rest));
+                // console.log("After Adding Item: "+ sessionStorage.getItem("restaurant"));
+                clearSelect();
+                fillCategories();
+
+                // append item to the category
+                const newItem = document.createElement("div");
+                newItem.id = selectedCategory;
+                const label_name = document.createElement("label");
+                newItem.appendChild(label_name.appendChild(document.createTextNode(item_name)));
+
+                const label_price = document.createElement("label");
+                label_price.innerHTML = " ($" + item_price + ")" + "<br>";
+                newItem.appendChild(label_price);
+
+                const label_desc = document.createElement("label");
+                label_desc.innerHTML = item_desc + "<br><br>";
+                newItem.appendChild(label_desc);
+
+                document.getElementById(selectedCategory).appendChild(newItem);
+
+            } else {
+                alert("Please enter all fields & number value for Price");
+                return;
+            }
+        }
+    </script>
+</body>
+<% include ../partials/footer %>
+
+
+</html>

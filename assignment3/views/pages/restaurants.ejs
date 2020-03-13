@@ -1,0 +1,23 @@
+<html>
+
+<head>
+    <% include ../partials/header %>
+</head>
+
+<body>
+    <!-- show the newly added restaurant  -->
+	<h1>List of Restaurants</h1>
+	<ul style="list-style: none">
+	<%
+	for (let restaurant in restaurants){
+		%>
+		<li><a href="/restaurants/<%= restaurants[restaurant].id %>"><%= restaurants[restaurant].name %></a></li>
+	<%
+}
+	%>
+</ul>
+</body>
+<% include ../partials/footer %>
+
+
+</html>
