@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <% include ../partials/header %>
+</head>
+<body>
+    <form onsubmit="submitForm(event)">
+        <label for="name">Restaurant Name: </label>
+        <input id="name" type="text" name="name_field">
+        <br><br>
+        <label for="delivery-fee">Delivery Fee: </label>
+        <input id="delivery-fee" type="text" name="name_field">
+
+        <br><br>
+        <label for="min-order">Minimum Order </label>
+        <input id="min-order" type="number" name="name_field" min="1">
+
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        const submitForm = (e) => {
+            e.preventDefault();
+            console.log("Form Submitted");
+            const rest_name = document.getElementById("name").value;
+            const delivery_fee = document.getElementById("delivery-fee").value;
+            const min_order = document.getElementById("min-order").value;
+            const restaurant = { "name": rest_name, "delivery_fee": delivery_fee, "min_order": min_order};
+
+            if (rest_name != "" && delivery_fee != "" && min_order != ""){
+                console.log(rest_name, delivery_fee, min_order);
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://localhost:3000/restaurants", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                xhr.onload = function(){
+                    if (xhr.status === 200){
+                        // console.log(xhr.responseText);
+                        const new_rest = JSON.parse(xhr.responseText);
+                        console.log(new_rest.restaurant.id);
+                        window.location.href = "http://localhost:3000/restaurants/" + new_rest.restaurant.id;
+                    }
+                    else{
+                        console.log(xhr.responseText);
+                    }
+                }
+                xhr.send(JSON.stringify(restaurant));
+            }
+            else {
+                alert("Not Successful");
+                console.log(rest_name, delivery_fee, min_order);
+            }
+        }
+    </script>
+</body>
+</html>
