@@ -1,0 +1,1 @@
+{"id":30,"name":"Tasty Fresh Chicken","price":690,"reviews":["http://localhost:3000/reviews/94","http://localhost:3000/reviews/890"],"buyers":["http://localhost:3000/users/24","http://localhost:3000/users/246"],"url":"http://localhost:3000/products/30"}
