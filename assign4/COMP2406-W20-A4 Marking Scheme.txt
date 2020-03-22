@@ -1,0 +1,45 @@
+Total Marks: 100
+
+You MUST use MongoDB to store the user profiles, order data, and session data for this assignment. 
+If your assignment does not store profile and order information in the database, you will receive a 0. 
+If your assignment does not store session data in the database, you will receive a 20 mark deduction.
+If you submit a node_modules folder or MongoDB database folder, you will receive a 20 mark deduction.
+
+Navigation Header (12 marks):
+	3 - Shows correct information when client is logged in
+	3 - Shows correct information when client is not logged in
+	4 - User can login to the system through a login form in the header or on a login page that can be reached via a link in the header
+	2 - User can log out through link/button in header
+	
+User Registration (16 marks):
+	5 - New user can specify a username/password and register through the registration page
+	3 - Duplicate names are detected and an error is displayed
+	3 - The user is redirected to their profile page after successful registration
+	3 - The user is 'logged in' to the system upon successful registration
+	2 - New users start with privacy set to false and no order history
+	
+User Directory (12 marks):
+	4 - Returns all usernames that match the search parameter
+	4 - Returns only non-private profiles
+	4 - Links in provided HTML are to correct profile page resources
+	
+User Profile Page (20 marks):
+	3 - Responds with 403/404 error if profile is private and requesting client is not logged in as the user
+	4 - Shows the username and order history if profile is not private or requesting client is logged in as the user
+	3 - Order history links are to correct order resources
+	7 - If user is logged in and viewing their own profile, they can change their privacy setting and save the changes to the server
+	3 - Does NOT show privacy settings if the client is not logged in as the owner of the profile
+	
+Order Summary Page (15 marks):
+	5 - Responds with 403/404 error if user who placed order is set to private and requesting client is not logged in at that user
+	6 - Page contains summary of item names and quantities in the order
+	4 - Page contains other required data (restaurant name, username, subtotal, tax, delivery fee, total)
+	
+Order Form (10 marks):
+	3 - Order form is only viewable by logged in users
+	4 - Order form contains correct navigation header
+	3 - Order form supports minimum required functionality
+
+Code Quality and Documentation (15 marks):
+Your code should be well-written and easy to understand. This includes providing clear documentation explaining the purpose and function of pieces of your code. You should use good variable/function names that make your code easier to read. You should do your best to avoid unnecessary computation and ensure that your code runs smoothly throughout operation.
+	
