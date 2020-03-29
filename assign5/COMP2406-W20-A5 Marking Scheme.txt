@@ -1,0 +1,34 @@
+Total Marks: 100
+
+If you submit a node_modules folder or MongoDB database folder, you will receive a 20 mark deduction.
+
+Registration, Logging In/Out (10 marks)
+	2 - Users can register by providing username and password
+	2 - No duplicate usernames are allowed
+	2 - New users are given 10 random cards and no friends
+	
+	2 - Users can log in to the application
+	2 - Users can log out of the application
+	
+Friends (25 marks)
+	5 - User can search for friends by username and propose friend request from search results
+	2 - Users cannot become friends with the same person twice
+	5 - A user is updated in 'real-time' when a friend proposal is made to them
+	4 - User can reject a friend proposal successfully
+	4 - User can accept a friend proposal successfully
+	5 - Users can view their list of friends and see their friends cards
+	
+Trades (40 marks)
+	7 - Users can propose trades to their friends
+	3 - A user is updated in 'real-time' when a trade proposal is made to them
+	5 - User can view proposed trade details
+	3 - User can reject a trade proposal successfully
+	14 - User can accept a trade proposal successfully
+	8 - Trades are not processed when invalid (e.g., user's do not have required cards anymore) or invalid trades are impossible
+
+
+Design Document, Implementation Quality, and Overall Design Decisions (25 marks):
+	Your design document should clearly explain how to setup your system and how to fully test the various features of your application. Additionally, these marks will be awarded based on how reactive, scalable, and robust your application is. Your pages should respond to user interaction in a seemless way (e.g., live updates of trades, friend requests, etc.). You should explain your overall design in detail and provide supporting arguments for the design decisions you made. Once the TA has read this document, they should have a solid idea of how your system works and what features it offers.
+
+Extra Features (15 marks):
+	Up to 15 marks will be awarded for features added beyond the requirements of the assignment (up to a maximum of 100%). This can include new functionality, such as proposing counter-offers to trade, a messaging system between friends, customized card search abilities when building trades or viewing cards, or anything else you think would make a good addition. You may also receive these marks for going above and beyond what is expected in terms of visual appeal and reactivity within your pages. Note that these marks are meant to be difficult to receive. They are not simple bonus marks.
