@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- why isn't this working -->
+    <%- include ("../partials/header") %>
+</head>
+<html>
+
+<body onload="checkUserInSession()">
+    <h2>Register User</h2>
+    <form onsubmit="submitUser(event)">
+        <div>
+        <label for="username">Username: </label>
+        <input type="text" id="username" placeholder="username">
+    </div>
+    <div>
+        <label for="password">Password: </label>
+        <input type="password" id="password" placeholder="password">
+    </div>
+    <div>
+        <input type="submit" value="Register">
+    </div>
+    </form>
+</body>
+<script>
+    function submitUser(event){
+        event.preventDefault();
+
+        //Send Data to Server
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        if (typeof username == "undefined" || typeof password == "undefined" || username == "" || password == ""){
+            alert("Both username & password are mandatory");
+            return;
+        }
+        const user = {
+            username,
+            password
+        };
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/users", true);
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.onload = function(){
+            console.log("User: ", user);
+            if (xhr.status === 200){
+                console.log("User Saved: ", xhr.responseText);
+                const data = JSON.parse(xhr.responseText).msg;
+                localStorage.setItem("user", JSON.stringify(data));
+                console.log("User ID: " + data._id);
+                window.location.href = "/users/" + data._id;
+            }
+            else {
+                alert("Error: " + JSON.parse(xhr.responseText).msg);
+                return;
+            }
+        }
+
+        xhr.onerror = function(){
+            console.error("Error occurred while sending Request Data to POST /users API endpoint");
+        }
+
+        xhr.send(JSON.stringify(user));
+
+    }
+</script>
+<footer>
+    <%- include ("../partials/footer") %>
+</footer>
+
+</html>

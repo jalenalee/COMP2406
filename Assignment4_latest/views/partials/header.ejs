@@ -1,0 +1,66 @@
+<div class="header">
+    <nav>
+        <a href="/">Home</a>
+        <a href="/users">View Users</a>
+        <a href="/registeration" id="register" style="display: none;">Register User</a>
+        <a href="/orders" id="order" style="display: none;">Order Food</a>
+        <a href="/users" id="details" style="display: none;" onclick="showProfile(event)">User Profile</a>
+        <a href="/login" id="login" style="display: none;">Login</a>
+        <a href="#" id="logout" style="display: none;" onclick="logout()">Logout</a>
+
+    </nav>
+</div>
+<script>
+    function showProfile(event){
+        event.preventDefault();
+        const userId = JSON.parse(localStorage.getItem("user"))._id;
+        document.getElementById("details").setAttribute("href", `/users/${userId}`);
+        window.location.href = `/users/${userId}`;
+    }
+
+    function checkUserInSession(){
+        // let user;
+
+        if (localStorage.getItem("user")){
+            document.getElementById("order").style.display = "inline";
+            document.getElementById("details").style.display = "inline";
+            document.getElementById("logout").style.display = "inline";
+            document.getElementById("register").style.display = "none";
+            document.getElementById("login").style.display = "none";
+            // document.getElementsByName("loginForm").style.display = "none";
+        }
+        else {
+            document.getElementById("order").style.display = "none";
+            document.getElementById("details").style.display = "none";
+            document.getElementById("logout").style.display = "none";
+            document.getElementById("register").style.display = "inline";
+            document.getElementById("login").style.display = "inline";
+            // document.getElementsByName("loginForm").style.display = "inline";
+        }
+    }
+
+    function logout(){
+        const id = JSON.parse(localStorage.getItem("user"))._id;
+        console.log("Sending POST to Backend to logout");
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/logout", true);
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.onload = function(){
+            if (xhr.status === 200){
+                localStorage.clear();
+                alert(JSON.parse(xhr.responseText).msg);
+                window.location.href = "/";
+            }
+            else {
+                alert(JSON.parse(xhr.responseText).msg);
+            }
+        }
+        xhr.onerror = function(){
+            alert(JSON.parse(xhr.responseText).msg);
+            return;
+        }
+        xhr.send(JSON.stringify({id}));
+
+        // window.location.href = "/";
+    }
+</script>

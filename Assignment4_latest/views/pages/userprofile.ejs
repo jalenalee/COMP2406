@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- why isn't this working -->
+    <%- include ("../partials/header") %>
+</head>
+<html>
+
+<body onload="checkUserInSession();checkAuthorizedUser()">
+<!-- <h1 id="notFound">404 - User Not Found</h1> -->
+<h1>User Profile for <%= user.username %></h1>
+<br><br>
+<form onsubmit="savePrivacyMode(event)" id="editprivacy">
+    <div>
+    <label>Privacy Mode: </label>
+    <input type="radio" name="privacy" id="mode_on" value="true">ON
+    <input type="radio" name="privacy" id="mode_off" checked="checked" value="false">OFF
+    <input type="submit" value="Save Privacy Mode">
+    </div>
+</form>
+<div id= "orders">
+    <h1>Order History</h1>
+    <% if (orders){
+            let values = Object.values(orders);
+            for (let order of values){
+        %>
+        <a href = "/orders/<%= order._id %>" style="display:block;"><%= order._id %></a>
+    <%  }
+} else {
+        %>
+        <h2>No Orders Found !!</h2>
+    <% }%>
+</div>
+<script>
+    function checkAuthorizedUser(){
+        const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")): undefined;
+        // const userId = user._id;
+        // Get User ID from URL
+        let userIdFromURL = window.location.pathname;
+        userIdFromURL = userIdFromURL.slice(userIdFromURL.lastIndexOf("/") + 1);
+        // console.log(userIdFromURL);
+        if (user && user._id == userIdFromURL){
+            // document.getElementById("editprivacy").style.display = "block";
+            document.getElementById("orders").style.display = "block";
+        } 
+        // else if(!user && user.privacy == false) {
+        //     document.getElementById("notFound").style.display = "none";
+        //     document.getElementById("editprivacy").style.display = "none";
+        // }
+        else{
+            // document.getElementById("orders").style.display = "none";
+            document.getElementById("editprivacy").style.display = "none";
+
+        }
+    }
+
+
+    function savePrivacyMode(event){
+        event.preventDefault();
+        const items = document.getElementsByName("privacy");
+        for (let item of items){
+            if (item.checked){
+                let value = item.value;
+                let user = JSON.parse(localStorage.getItem("user"));
+                const userId = user._id;
+                console.log(userId);
+                let privacy = user.privacy = value;
+                console.log(`User ${userId} => Privacy: ${user.privacy}`);
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("PUT", "/privacy", true);
+                xhr.setRequestHeader("content-type", "application/json");
+
+                xhr.onload = function(){
+                    if (xhr.status === 200){
+                        localStorage.setItem("user", JSON.stringify(user));
+                    alert(JSON.parse(xhr.responseText).msg);
+                    // console.log("Returned from saving privacy");
+                }
+                else {
+                    alert("Error: " + JSON.parse(xhr.responseText).msg);
+                }
+                }
+                xhr.onerror = function(){
+                    console.log("Error: " + JSON.parse(xhr.responseText).msg);
+                }
+                xhr.send(JSON.stringify({userId, privacy}));
+            }
+        }
+    }
+</script>
+</body>
+<footer>
+    <%- include ("../partials/footer") %>
+</footer>
+
+</html>
