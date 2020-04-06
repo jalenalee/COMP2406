@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- why isn't this working -->
+    <%- include ("../partials/header") %>
+</head>
+<html>
+
+<body onload="checkUserInSession()">
+    <ul style="list-style: none;">
+    <% users.map(user => {
+        if (!user.privacy){
+        %>
+        <li><a href=/users/<%= user._id %>><%= user.username%></a></li>
+        <%
+    }})%>
+</ul>
+</body>
+<footer>
+    <%- include ("../partials/footer") %>
+</footer>
+
+</html>

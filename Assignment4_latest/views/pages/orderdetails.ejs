@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- why isn't this working -->
+    <%- include ("../partials/header") %>
+</head>
+<html>
+
+<body onload="checkUserInSession()">
+<h1 style="border-bottom: 2px solid #000000;display: inline">Order Details</h1>
+<h2>Order ID: #<%= order._id %></h2>
+<br>
+<h3 style="display: inline;">Restaurant Name: </h3><label><%= order.order.restaurantName %></label>
+<br>
+<h3 style="display: inline;">Placed By: </h3><label><%= username %></label>
+<br><br>
+<h3>Order Contents</h3>
+<%
+if (!order){
+    %>
+<h2>Order Not Found</h2>
+<% } else {
+for (let i = 0; i < order.order.item.length; i++){
+%>
+<i><%= order.order.item[i] %></i> X <%= order.order.quantity[i] %><br>
+<%
+}
+}
+%>
+<br>
+<h3 style="display: inline;">Subtotal: </h3><label>$<%= order.order.subtotal %></label><br>
+<h3 style="display: inline;">Tax: </h3><label>$<%= order.order.tax %></label><br>
+<h3 style="display: inline;">Delivery Fee: </h3><label>$<%= order.order.deliveryFee %></label><br>
+<h3 style="display: inline;">Total: </h3><label>$<%= order.order.total %></label><br>
+
+<!-- <%= JSON.stringify(order) %> -->
+
+</body>
+<footer>
+    <%- include ("../partials/footer") %>
+</footer>
+
+</html>
