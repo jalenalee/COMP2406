@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include ("../partials/header") %>
+    <script type="text/javascript">
+    function checkLoggedUserInSession(){
+    const user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")).user : null;
+    // console.log(user);
+    if (!user) {
+        window.location.href = "/unknown.html";
+    }
+
+    else {
+        let url = window.location.href;
+        let userFromURL = url.slice(url.lastIndexOf("/") + 1);
+        if (userFromURL != user._id){
+            // console.log(userFromURL, user._id);
+            window.location.href = "/unknown.html";
+        }
+    }
+
+}
+
+checkLoggedUserInSession();
+    </script>
+</head>
+<html>
+
+<body onload="checkUserInSession();showCards()">
+<div style="width: 25%;float: left;">
+    <h1>User Profile: <%= user.username %></h1>
+
+    <table style="display: inline;">
+        <tr>
+            <td><h2><%= user.username %>'s Cards</h2></td>
+        <tr>
+            <!-- <td><ul>
+                <% if (user && user.cards) { for (let card of user.cards) { %>
+                    <li><a href=../cards/<%= card._id %> target="_blank"><%= card.name %></a></li>
+                    <% }} else { %>
+                        No cards left !!
+                        <% } %>
+                    </ul></td> -->
+                    <td id="showcards"></td>
+        </tr>
+        </table>
+</div>
+<div style="width: 50%;float: left;">
+    <table style="display: inline;">
+            <td><h2><%= user.username %>'s Friends</h2></td>
+        <tr>
+            <!-- <td>
+                <% if (user && user.friends.length > 0) { %>
+                <ul>
+                <% for (let friend of user.friends) { %>
+                    <li>
+                        <button style="background: none; padding: 0; border: 0; text-decoration: underline; color: blue; cursor: pointer;" onclick="showFriendCards(event,`<%= user.username %>`, `<%= friend %>`)"><%= friend%></button>
+                    </li>
+                    <% } %>
+                </ul> 
+                    <% } else { %>
+                        <h3>No Friends exist !!</h3>
+                        <% } %>
+                    </td> -->
+                    <td id="showfriends"></td>
+                    <td id="friendProfile"></td>
+        </tr>
+    </table>
+</div>    
+
+<div style="width: 25%;float: left;">
+    <table style="display: inline;">
+        <tr>
+            <td><h2>Search for People</h2></td>
+        </tr>
+        <tr>
+            <td><input type="text" id="search_users" placeholder="Search for Name" oninput="searchUsers(event)"></td>
+        </tr>
+        <tr>
+            <td><div id="searchedUsers"></div></td>
+        </tr>
+        <tr>
+            <th>Pending Friend Requests:</th>
+        </tr>
+        <!-- <tr>
+            <td><input type="button" onclick="showPendingFriendRequests(event)" value="Pending Incoming Friend Requests"></td>
+        </tr>
+        </!-->
+        <tr>
+            <td><div id="pendingFriends"></div></td>
+        </tr>
+    </table>
+</div>
+
+<script>
+
+// Poll the requests
+function poll(fn, timer){
+        setInterval(() => fn(), timer);
+    }
+
+    showPendingFriendRequests();
+    showFriends();
+    // showCards();
+
+    poll(showPendingFriendRequests, 5000);
+    poll(showFriends, 5000);
+    // poll(showCards, 5000);
+
+    function pendingFriends(userDetails){
+        // console.log(userDetails);
+        let pendingFriends = document.getElementById("pendingFriends");
+        pendingFriends.innerHTML = "";
+        if (userDetails.user.incoming_friend_requests){
+            pendingFriends.innerHTML = "";
+            let ul = document.createElement("ul");
+            ul.style.listStyleType = "none";
+            userDetails.user.incoming_friend_requests.map(request => {
+                let li = document.createElement("li");
+                li.appendChild(document.createTextNode(request));
+                let div = document.createElement("div");
+                div.id = request;
+                let confirm = document.createElement("button");
+                confirm.innerHTML = "Confirm Request";
+                confirm.setAttribute("onclick", `confirmFriend(event, ${JSON.stringify(userDetails.user.username)},${JSON.stringify(request)})`);
+                div.appendChild(confirm);
+
+                let reject = document.createElement("button");
+                reject.innerHTML = "Reject Request";
+                reject.setAttribute("onclick", `rejectFriend(event, ${JSON.stringify(userDetails.user.username)},${JSON.stringify(request)})`);
+                div.appendChild(reject);
+
+                li.appendChild(div);
+                // div.appendChild(document.createTextNode(request));
+                ul.appendChild(li); 
+
+                pendingFriends.appendChild(ul);
+            });
+        }
+        else {
+            pendingFriends.innerHTML = "No pending friend requests !!"
+        }
+    }
+
+    function showPendingFriendRequests(){
+        // setInterval(() => {
+        // event.preventDefault();
+        const user = JSON.parse(sessionStorage.getItem("user")).user;
+        const username = user.username;
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `/pendingfriends/${username}`, true);
+        xhr.onload = function(){
+            const result = JSON.parse(xhr.responseText);
+            if (xhr.status === 200){
+                sessionStorage.setItem("user", JSON.stringify(result));
+                pendingFriends(result);
+            }
+            else {
+                document.getElementById("pendingFriends").innerHTML = result.msg;
+                console.log(result.msg);
+            }
+        }
+        xhr.onerror = function(){
+        console.error("Error occurred while sending Request Data to GET Pending Friend Requests API endpoint");
+    }
+    xhr.send();
+        // } , 5000);
+        
+    }
+
+
+    function showAllFriends(userDetails){
+        // console.log(userDetails);
+        let showfriends = document.getElementById("showfriends");
+        showfriends.innerHTML = "";
+        if (userDetails.user.friends){
+            showfriends.innerHTML = "";
+            let ul = document.createElement("ul");
+            ul.style.listStyleType = "none";
+            userDetails.user.friends.map(request => {
+                let li = document.createElement("li");
+                // li.appendChild(document.createTextNode(request));
+                let button = document.createElement("button");
+                button.style = "background: none; padding: 0; border: 0; text-decoration: underline; color: blue; cursor: pointer;";
+                button.setAttribute("onclick", `showFriendCards(event,\"${userDetails.user.username}\", \"${request}\" )`);
+                button.innerHTML = request;
+                li.appendChild(button);
+                ul.appendChild(li); 
+
+                showfriends.appendChild(ul);
+            });
+        }
+        else {
+            showfriends.innerHTML = "No pending friend requests !!"
+        }
+    }
+
+
+    function showFriends(){
+        // setInterval(() => {
+        // event.preventDefault();
+        const user = JSON.parse(sessionStorage.getItem("user")).user;
+        const username = user.username;
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `/showFriends/${username}`, true);
+        xhr.onload = function(){
+            const result = JSON.parse(xhr.responseText);
+            if (xhr.status === 200){
+                sessionStorage.setItem("user", JSON.stringify(result));
+                showAllFriends(result);
+            }
+            else {
+                document.getElementById("showfriends").innerHTML = result.msg;
+                console.log(result.msg);
+            }
+        }
+        xhr.onerror = function(){
+        console.error("Error occurred while sending Request Data to GET All Friends Requests API endpoint");
+    }
+    xhr.send();
+        // } , 5000);
+        
+    }
+
+
+    function showAllCards(userDetails){
+        // console.log(userDetails);
+        let showcards = document.getElementById("showcards");
+        showcards.innerHTML = "";
+        if (userDetails.user.cards){
+            showcards.innerHTML = "";
+            let ul = document.createElement("ul");
+            // ul.style.listStyleType = "none";
+            userDetails.user.cards.map(request => {
+                let li = document.createElement("li");
+                li.appendChild(document.createTextNode(request.name));
+                ul.appendChild(li); 
+
+                showcards.appendChild(ul);
+            });
+        }
+        else {
+            showcards.innerHTML = "No Cards found !!"
+        }
+    }
+
+
+    function showCards(){
+        // setInterval(() => {
+        // event.preventDefault();
+        const user = JSON.parse(sessionStorage.getItem("user")).user;
+        const username = user.username;
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `/showCards/${username}`, true);
+        xhr.onload = function(){
+            const result = JSON.parse(xhr.responseText);
+            if (xhr.status === 200){
+                sessionStorage.setItem("user", JSON.stringify(result));
+                showAllCards(result);
+            }
+            else {
+                document.getElementById("showcards").innerHTML = result.msg;
+                console.log(result.msg);
+            }
+        }
+        xhr.onerror = function(){
+        console.error("Error occurred while sending Request Data to GET All Cards API endpoint");
+    }
+    xhr.send();
+        // } , 5000);
+        
+    }
+
+
+
+
+
+
+    function showUserProfile(friendName, friendCards){
+        let td = document.getElementById("friendProfile");
+        td.innerHTML = "";
+        td.innerHTML += `
+        <strong><label>${friendName}</label></strong><br><br>`;
+
+        friendCards.map(card => {
+            td.innerHTML += `${card.name}<br>`;
+        });
+    }
+
+    function showFriendCards(event, username, friend){
+        event.preventDefault();
+        console.log("CLicked");
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `/users/${username}/${friend}`, true);
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.onload = function(){
+            const response = JSON.parse(xhr.responseText);
+            if (xhr.status === 200){
+                console.log("Friend Valid");
+                // show profile on the same page
+                showUserProfile(response.friendName, response.friendCards);
+            }
+            else {
+                console.log("Friend not valid");
+            }
+        }
+        xhr.onerror = function(){
+        console.error("Error occurred while Showing Friend's Cards endpoint");
+    }
+        xhr.send(JSON.stringify({username}));
+    }
+
+    function confirmFriend(event, from, to){
+        event.preventDefault();
+        console.log(`Confirm ${from} ${to}`);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `/confirm/${from}/${to}`, true);
+        xhr.onload = function(){
+            const response = JSON.parse(xhr.responseText);
+            if (xhr.status === 200){
+            // let user = JSON.parse(sessionStorage.getItem("user"));
+            sessionStorage.setItem("user", JSON.stringify(response.user));
+
+            window.location.reload();
+            }
+            else {
+                alert(response.msg);
+            }
+        }
+        xhr.onerror = function(){
+        console.error("Error occurred while hitting Confirming Friend Request endpoint");
+    }
+
+        xhr.send(null);
+    }
+
+    function rejectFriend(event, from, to){
+        event.preventDefault();
+        console.log(`Reject Request ${from} ${to}`);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `/reject/${from}/${to}`, true);
+        xhr.onload = function(){
+            const response = JSON.parse(xhr.responseText);
+            if (xhr.status === 200){
+            // let user = JSON.parse(sessionStorage.getItem("user"));
+            sessionStorage.setItem("user", JSON.stringify(response.user));
+
+            window.location.reload();
+            }
+            else {
+                alert(response.msg);
+            }
+        }
+        xhr.onerror = function(){
+        console.error("Error occurred while hitting Rejecting Friend Request endpoint");
+    }
+
+        xhr.send(null);
+    }
+
+    
+
+function sendFriendRequest(event, from, to){
+    event.preventDefault();
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/sendfriendreq/${from}/${to}`, true);
+    xhr.onload = function(){
+        const response = JSON.parse(xhr.responseText);
+        if (xhr.status === 200){
+            alert(response.msg);
+            let user = JSON.parse(sessionStorage.getItem("user"));
+            sessionStorage.setItem("user", JSON.stringify(response.user));
+
+            window.location.reload();
+        }
+        else {
+            alert(response.msg);
+        }
+    }
+
+    xhr.onerror = function(){
+        console.error("Error occurred while sending Request Data to POST /register API endpoint");
+    }
+
+    xhr.send(null);
+}
+
+function createPeopleList(people, loggedInUser){
+    document.getElementById("searchedUsers").innerHTML = "";
+    console.log(people.users);
+    if (!people) {return;}
+    let searchedUsers = document.getElementById("searchedUsers");
+    let table = document.createElement("table");
+    table.id = "people";
+
+
+    const newFriends = people.users.map(person => {
+        let tr = document.createElement("tr");
+        tr.style.display = "block";
+        let tdName = document.createElement("td");
+        tdName.appendChild(document.createTextNode(person.username));
+        let tdBtn = document.createElement("td");
+        let addFriendBtn = document.createElement("button");
+        addFriendBtn.innerHTML = "Add Friend";
+        addFriendBtn.setAttribute("onclick", `sendFriendRequest(event,${loggedInUser},${JSON.stringify(person.username)})`);
+
+        // // console.log("Incoming Friend Requests: " + JSON.stringify(person.incoming_friend_requests));
+        // console.log(JSON.stringify(person.friends).indexOf(loggedInUser) > -1 || JSON.stringify(person.incoming_friend_requests).indexOf(loggedInUser) > -1 || JSON.stringify(person.outgoing_friend_requests).indexOf(loggedInUser) > -1);
+
+    if (JSON.stringify(person.friends).indexOf(loggedInUser) > -1 || JSON.stringify(person.incoming_friend_requests).indexOf(loggedInUser) > -1 || JSON.stringify(person.outgoing_friend_requests).indexOf(loggedInUser) > -1){
+        console.log("User Included")
+        addFriendBtn.removeAttribute("onclick");
+        addFriendBtn.setAttribute("disabled", "disabled")
+
+    if (JSON.stringify(person.friends).indexOf(loggedInUser) > -1 ){
+        addFriendBtn.innerHTML = "Already a Friend";
+    }
+    else if (JSON.stringify(person.incoming_friend_requests).indexOf(loggedInUser) > -1 ){
+        addFriendBtn.innerHTML = "Friend Request Sent To";
+    }
+    else if (JSON.stringify(person.friends).indexOf(loggedInUser) > -1 || JSON.stringify(person.incoming_friend_requests).indexOf(loggedInUser) > -1 || JSON.stringify(person.outgoing_friend_requests).indexOf(loggedInUser) > -1){
+        addFriendBtn.innerHTML = "Friend Request Received From";
+    }
+}
+    
+    tdBtn.appendChild(addFriendBtn);
+    tr.appendChild(tdName);
+    tr.appendChild(tdBtn);
+    table.appendChild(tr);
+    });
+
+    document.getElementById("searchedUsers").appendChild(table);
+}
+
+
+function searchUsers(event){
+    event.preventDefault();
+    console.log(event.target.value);
+
+    const text = event.target.value;
+    if (text == ""){
+        return;
+    }
+
+    const user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : null;
+    if (!user){
+        alert("You are not logged in. Please login/register first !!");
+        window.location.href = "/";
+    }
+
+    const username = JSON.stringify(user.user.username);
+    console.log("Search users performed by: " + username);
+    // Search for users
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `/findUsers/${text}`, true);
+    xhr.setRequestHeader("content-type", "application/json");
+    xhr.onload = function(){
+        if (xhr.status === 200){
+            // display users who aren't friends with Add Friend button, otherwise just friends without that button.
+            // console.log(JSON.stringify(xhr.responseText));
+            console.log("Users found");
+            let users = JSON.parse(xhr.responseText);
+            createPeopleList(users, username);
+        }
+        else {
+            console.log(JSON.stringify(xhr.responseText));
+        }
+    }
+
+    xhr.onerror = function(){
+        console.error("Error occurred while sending Request Data to POST /register API endpoint");
+    }
+
+    xhr.send(JSON.stringify({username}));
+}
+</script>
+
+</body>
+
+</html>

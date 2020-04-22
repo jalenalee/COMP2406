@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include ("../partials/header") %>
+</head>
+<html>
+
+<body onload="checkUserInSession()">
+    <h1>Login / Register</h1>
+
+    <table>
+        <tr>
+            <td><label for="username">Username: </label></td>
+            <td><input type="text" id="username" placeholder="Username" required></td>
+        </tr>
+    <tr>
+        <td><label for="password">Password: </label></td>
+        <td><input type="password" id="password" placeholder="Password" required></td>
+    </tr> 
+    <tr>
+        <form onsubmit="login(event)" id="loginForm">
+        <td><input type="submit" value="Login"></td>
+        </form>
+        
+        <form onsubmit="register(event)" id="registerForm">
+        <td><input type="submit" value="Register"></td>
+        </form>
+    </tr>
+    </table>
+</body>
+
+</html>
+
+<script>
+    function login(event){
+        event.preventDefault();
+        console.log("Login");
+        //Send Data to Server
+        const username_field = document.getElementById("username").value;
+        const password_field = document.getElementById("password").value;
+        const username = username_field ? username_field.trim() : "";
+        const password = password_field ? password_field.trim() : "";
+        if (username == "" || password == ""){
+            return alert("Username & Password are mandatory");
+        }
+        const user = {
+            username,
+            password
+        };
+        let data = null;
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/login", true);
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.onload = function(){
+            console.log("User: ", user);
+            if (xhr.status === 200){
+                console.log("User Logged In: " + JSON.parse(xhr.responseText));
+                data = JSON.parse(xhr.responseText);
+                // console.log(data.user._id);
+                sessionStorage.setItem("user", JSON.stringify(data));
+
+                console.log("User ID: " + data._id);
+                window.location.href = "/users/" + data.user._id;
+                
+            }
+            else {
+                alert("Error: " + JSON.parse(xhr.responseText).msg);
+            }
+        }
+
+        xhr.onerror = function(){
+            console.error("Error occurred while sending Request Data to POST /login API endpoint");
+        }
+
+        xhr.send(JSON.stringify({username, password }));
+
+    }
+
+
+    function register(event){
+        event.preventDefault();
+        console.log("Register");
+        //Send Data to Server
+        const username_field = document.getElementById("username").value;
+        const password_field = document.getElementById("password").value;
+        const username = username_field ? username_field.trim() : "";
+        const password = password_field ? password_field.trim() : "";
+        if (username == "" || password == ""){
+            return alert("Username & Password are mandatory");
+        }
+
+        const user = {
+            username,
+            password
+        };
+        let data = null;
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/register", true);
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.onload = function(){
+            console.log("Registered User: ", user);
+            if (xhr.status === 200){
+                console.log("User Logged In: " + xhr.responseText);
+                data = JSON.parse(xhr.responseText);
+                // console.log(data.user._id);
+                sessionStorage.setItem("user", JSON.stringify(data));
+
+                console.log("User ID: " + data._id);
+                window.location.href = "/users/" + data.user._id;
+                
+            }
+            else {
+                alert("Error: " + JSON.parse(xhr.responseText).msg);
+            }
+        }
+
+        xhr.onerror = function(){
+            console.error("Error occurred while sending Request Data to POST /register API endpoint");
+        }
+
+        xhr.send(JSON.stringify({username, password }));
+
+    }
+
+
+</script>
