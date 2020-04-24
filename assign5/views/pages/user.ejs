@@ -29,89 +29,111 @@ checkLoggedUserInSession();
 <html>
 
 <body onload="checkUserInSession();showCards();">
-<div style="width: 25%;float: left;">
-    <h1>User Profile: <%= user.username %></h1>
+<div style="display: grid;" >
+    <div style="width: 100%; border-bottom-style: groove; border-bottom-width: 2vem;">
+        <div style="width: 25%;float: left;">
+            <h1>User Profile: <%= user.username %></h1>
+        
+            <table style="width: 100%;">
+                <tr>
+                    <td><h2><%= user.username %>'s Cards</h2></td>
+                <tr>
+                            <td id="showcards"></td>
+                </tr>
+                </table>
+        </div>
 
-    <table style="display: inline;">
-        <tr>
-            <td><h2><%= user.username %>'s Cards</h2></td>
-        <tr>
-                    <td id="showcards"></td>
-        </tr>
-        <tr> 
-            <td><label><h2>Pending Trades:</h2></label></td></tr>
-            <tr>
-                <td id="pendingtrades"></td>
-        </tr>
-        </table>
-</div>
-<div style="width: 49%;float: left;">
-    <table style="display: inline;">
-        <tr>
-            <td><h2><%= user.username %>'s Friends</h2></td>
-        </tr>
-        <tr>
-            <!-- <td>
-                <% if (user && user.friends.length > 0) { %>
-                <ul>
-                <% for (let friend of user.friends) { %>
-                    <li>
-                        <button style="background: none; padding: 0; border: 0; text-decoration: underline; color: blue; cursor: pointer;" onclick="showFriendCards(event,`<%= user.username %>`, `<%= friend %>`)"><%= friend%></button>
-                    </li>
-                    <% } %>
-                </ul> 
-                    <% } else { %>
-                        <h3>No Friends exist !!</h3>
-                        <% } %>
-                    </td> -->
-                    <td id="showfriends"></td>
-                    <td id="friendProfile"></td>
-        </tr>
-        <tr>
-             <td><h2>Propose a Trade:</h2></td>
-        </tr>
-        <tr>
-            <td>Select your Cards to Trade: </td>
-        </tr>
-        <tr>
-            <td id="cardsToTrade"></td>
+        <div style="width: 49%;float: left;">
+            <table style="width: 100%;">
+                <tr>
+                    <td><h2><%= user.username %>'s Friends</h2></td>
+                </tr>
+                <tr>
+                    <!-- <td>
+                        <% if (user && user.friends.length > 0) { %>
+                        <ul>
+                        <% for (let friend of user.friends) { %>
+                            <li>
+                                <button style="background: none; padding: 0; border: 0; text-decoration: underline; color: blue; cursor: pointer;" onclick="showFriendCards(event,`<%= user.username %>`, `<%= friend %>`)"><%= friend%></button>
+                            </li>
+                            <% } %>
+                        </ul> 
+                            <% } else { %>
+                                <h3>No Friends exist !!</h3>
+                                <% } %>
+                            </td> -->
+                            <td id="showfriends" style="position: absolute;"></td>
+                            <td id="friendProfile"></td>
+                </tr>
+            </table>
+        </div>
+        <div style="width: 25%;float: left;">
+            <table style="width: 100%;">
+                <tr>
+                    <td><h2>Search for People</h2></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="search_users" placeholder="Search for Name" oninput="searchUsers(event)"></td>
+                </tr>
+                <tr>
+                    <td><div id="searchedUsers"></div></td>
+                </tr>
+                <tr>
+                    <td><h2>Pending Friend Requests:</h2></td>
+                </tr>
+                <!-- <tr>
+                    <td><input type="button" onclick="showPendingFriendRequests(event)" value="Pending Incoming Friend Requests"></td>
+                </tr>
+                </!-->
+                <tr>
+                    <td><div id="pendingFriends"></div></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+<div style="width: 100%;">
+    <div style="width: 40%;float: left;">
+        <table style="width: 100%;">
+            <tr> 
+                <td><label><h2>Pending Trades:</h2></label></td></tr>
+                <tr>
+                    <td id="pendingtrades"></td>
+                    <td id ="tradedetails"></td>
             </tr>
-    </table>
-</div>    
-
-<div style="width: 25%;float: left;">
-    <table style="display: inline;">
-        <tr>
-            <td><h2>Search for People</h2></td>
-        </tr>
-        <tr>
-            <td><input type="text" id="search_users" placeholder="Search for Name" oninput="searchUsers(event)"></td>
-        </tr>
-        <tr>
-            <td><div id="searchedUsers"></div></td>
-        </tr>
-        <tr>
-            <td><h2>Pending Friend Requests:</h2></td>
-        </tr>
-        <!-- <tr>
-            <td><input type="button" onclick="showPendingFriendRequests(event)" value="Pending Incoming Friend Requests"></td>
-        </tr>
-        </!-->
-        <tr>
-            <td><div id="pendingFriends"></div></td>
-        </tr>
-        <tr>
-            <td><h2>Select a Friend to Trade:</h2></td>
-        </tr>
-        <tr>
-            <td><select id="selectfriend" onchange="loadFriendsCards(event)"></select></td>
-        </tr>
-        <tr>
-            <td><div id="tradefriendcards"></div></td>
-        </tr>
-    </table>
+        </table>
+    </div>
+    <div style="width: 30%;float: left;">
+        <table style="width: 100%;">
+            <tr>
+                <td><h2>Propose a Trade:</h2></td>
+           </tr>
+           <tr>
+               <td>Select your Cards to Trade: </td>
+           </tr>
+           <tr>
+               <td id="cardsToTrade"></td>
+               </tr>
+        </table>
+    </div>
+    <div style="width: 29%;float: left;">
+        <table style="width: 100%;">
+            <tr>
+                <td><h2>Select a Friend to Trade:</h2></td>
+            </tr>
+            <tr>
+                <td><select id="selectfriend" onchange="loadFriendsCards(event)"></select></td>
+            </tr>
+            <tr>
+                <td><div id="tradefriendcards"></div></td>
+            </tr>
+        </table>
+    </div>
 </div>
+    
 
+
+
+</div>
 
 <script>
 // Poll the requests
@@ -130,16 +152,16 @@ function poll(fn, timer){
     poll(showPendingTradeRequests, 5000);
     // poll(showCards, 5000);
 
-function checkWhetherFriendExists(){
-    let td = document.getElementById("showfriends");
-    let ul = td && td.getElementsByTagName("ul");
-    if (td && ul && ul.length > 0){
-    // window.location.reload();
-    // loadFriendsCards();
-}
-}
+// function checkWhetherFriendExists(){
+//     let td = document.getElementById("showfriends");
+//     let ul = td && td.getElementsByTagName("ul");
+//     if (td && ul && ul.length > 0){
+//     // window.location.reload();
+//     // loadFriendsCards();
+// }
+// }
 
-checkWhetherFriendExists();
+// checkWhetherFriendExists();
 
 
     function pendingFriends(userDetails){
@@ -218,7 +240,15 @@ checkWhetherFriendExists();
             ul.style.listStyleType = "none";
             userDetails.user.incoming_trade_requests.map(request => {
                 let li = document.createElement("li");
-                li.appendChild(document.createTextNode(`Trade request from ${request.from_friend}`));
+
+                let a = document.createElement("a");
+                // button.style = "background: none; padding: 0; border: 0; text-decoration: underline; color: blue; cursor: pointer;";
+                a.href = `#tradedetails`;
+                a.setAttribute("onclick", `showTradeDetails(event,\"${userDetails.user.username}\", \"${request.from_friend}\" )`);
+                a.innerHTML = `<br><br>Trade request from ${request.from_friend}`;
+                li.appendChild(a);
+
+                // li.appendChild(document.createTextNode(`Trade request from ${request.from_friend}`));
                 let div = document.createElement("div");
                 div.class = request.from_friend;
                 let confirm = document.createElement("button");
@@ -286,8 +316,9 @@ checkWhetherFriendExists();
             userDetails.user.friends.map(request => {
                 let li = document.createElement("li");
                 // li.appendChild(document.createTextNode(request));
-                let button = document.createElement("button");
-                button.style = "background: none; padding: 0; border: 0; text-decoration: underline; color: blue; cursor: pointer;";
+                let button = document.createElement("a");
+                // button.style = "background: none; padding: 0; border: 0; text-decoration: underline; color: blue; cursor: pointer;";
+                button.href = `#showfriends`;
                 button.setAttribute("onclick", `showFriendCards(event,\"${userDetails.user.username}\", \"${request}\" )`);
                 button.innerHTML = request;
                 li.appendChild(button);
@@ -339,8 +370,12 @@ checkWhetherFriendExists();
             // ul.style.listStyleType = "none";
             userDetails.user.cards.map(request => {
                 let li = document.createElement("li");
-                // li.appendChild(document.createTextNode(request.name));
-                li.appendChild(document.createTextNode(request));
+                // a.appendChild(document.createTextNode(request));
+                let a = document.createElement("a");
+                a.href = `/cards/${request}`;
+                a.setAttribute("target", "_blank");
+                a.innerHTML = request;
+                li.appendChild(a);
                 ul.appendChild(li); 
 
                 showcards.appendChild(ul);
@@ -499,7 +534,43 @@ checkWhetherFriendExists();
     }
 
 
+    function tradeDetails(trade_details, userName, friendName){
+        let td = document.getElementById("tradedetails");
+        td.innerHTML = "";
+        td.innerHTML += `<label><strong> ${friendName}'s Cards</strong></label><br>`;
+        trade_details.friend_cards.map(card => {
+            td.innerHTML += `${card}<br>`;
+        });
+        td.innerHTML += `<br><label><strong>Your Cards</strong></label><br>`;
+        trade_details.user_cards.map(card => {
+            td.innerHTML += `${card}<br>`;
+        });
+    }
 
+    function showTradeDetails(event, username, friendname){
+        event.preventDefault();
+        console.log("Get Trade Details");
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `/showtradedetails/${username}/${friendname}`, true);
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.onload = function(){
+            const result = JSON.parse(xhr.responseText);
+            if (xhr.status === 200){
+                // Fill tradedetails html element id
+                tradeDetails(result.tradeDetails, username, friendname);
+            }
+            else {
+                // document.getElementById("tradedetails").innerHTML = result.msg;
+                alert(result.msg);
+                console.log(result.msg);
+            }
+        }
+        xhr.onerror = function(){
+        console.error("Error occurred while sending Request Data to GET All Cards API endpoint");
+    }
+    xhr.send(null);
+    }
 
 
 
@@ -529,6 +600,7 @@ checkWhetherFriendExists();
                 showUserProfile(response.friendName, response.friendCards);
             }
             else {
+                alert(response.msg);
                 console.log("Friend not valid");
             }
         }
@@ -764,7 +836,7 @@ function sendFriendRequest(event, from, to){
             alert(response.msg);
             // let user = JSON.parse(sessionStorage.getItem("user"));
             sessionStorage.setItem("user", JSON.stringify(response.user));
-            window.location.reload();
+            // window.location.reload();
 
         }
         else {

@@ -48,6 +48,39 @@ app.get("/users/:userId", async (req, res) => {
     }
 });
 
+// Show Trade Details
+app.post("/showtradedetails/:username/:friend", async (req, res) => {
+    try{
+        const friendName = req.params.friend;
+        const username = req.params.username;
+
+        let user = await User.findOne({username: username}).select("-password");
+        if (user)
+        {
+            // userDetails = (userDetails);
+            console.log(user);
+            const incoming_trade_request = user.incoming_trade_requests.filter(request => request.from_friend == friendName);
+
+            if (incoming_trade_request.length > 0){
+                console.log("Sending Trade Details: " + incoming_trade_request[0]);
+            return res.status(200).json({tradeDetails: incoming_trade_request[0]});
+            }
+            else{
+            return res.status(404).json({msg: "404 - Trade Doesn't Exist"});
+        }
+        }
+            
+        else {
+            return res.status(404).json({msg: "404 - Trade Not Found"});
+        }
+        }
+    catch(error){
+        console.log(error);
+        return res.status(404).json({msg: "Error Occurred while finding trade details"});
+    }
+
+});
+
 // Get card info
 app.get("/cards/:cardName", async (req, res) => {
     const cardName = req.params.cardName;
@@ -272,6 +305,12 @@ app.post("/proposeTrade", async (req, res) => {
 
         const reqFrom  = await User.findOne({username: from}).select("-password");
         const reqTo  = await User.findOne({username: to}).select("-password");
+
+
+        // Check if trade between same users already exists.
+        if (reqFrom.outgoing_trade_requests.find(request => request.to_friend == to)){
+            return res.status(404).json({msg: `A Trade Request already exists between ${from} and ${to}`});
+        }
 
         // console.log("Request From: " + reqFrom.username);
         // console.log("Request To: " + reqTo.username);
