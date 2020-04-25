@@ -32,3 +32,6 @@ Design Document, Implementation Quality, and Overall Design Decisions (25 marks)
 
 Extra Features (15 marks):
 	Up to 15 marks will be awarded for features added beyond the requirements of the assignment (up to a maximum of 100%). This can include new functionality, such as proposing counter-offers to trade, a messaging system between friends, customized card search abilities when building trades or viewing cards, or anything else you think would make a good addition. You may also receive these marks for going above and beyond what is expected in terms of visual appeal and reactivity within your pages. Note that these marks are meant to be difficult to receive. They are not simple bonus marks.
+
+
+
