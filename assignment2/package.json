@@ -4,7 +4,7 @@
     "description": "this is a restaurant ordering system",
     "main": "addproduct.js",
     "dependencies": {
-        "pug": "^2.0.4"
+        "pug": "^3.0.1"
     },
     "devDependencies": {
         "nodemon": "^2.0.2"
